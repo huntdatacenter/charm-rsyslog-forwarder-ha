@@ -1,0 +1,9 @@
+options:
+  log-locally:
+    type: boolean
+    default: false
+    description: Should logs be written locally as well as forwarded?
+  replication-mode:
+    type: string
+    default: fanout
+    description: Possible options are 'fanout' or 'failover' fanout replicates the log messages over all the defined syslog relations, failover replicates the log messages just if the previous server is down.

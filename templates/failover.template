@@ -1,0 +1,8 @@
+*.*   @@master.private_address:10514
+
+$ActionExecOnlyWhenPreviousIsSuspended on
+{% for server in slaves %}
+& @@{{server.private_address}}:10514
+{% endfor %}
+& /var/log/localbuffer
+$ActionExecOnlyWhenPreviousIsSuspended off

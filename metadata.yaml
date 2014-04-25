@@ -1,0 +1,12 @@
+name: rsyslog-forwarder-ha
+maintainer: Jorge Niedbalski <jorge.niedbalski@canonical.com>
+subordinate: true
+summary: forwards local syslog to remote syslog server
+description: |
+  Uses rsyslogs facilities to forward to a remote syslog server.
+requires:
+  juju-info:
+    interface: juju-info
+    scope: container
+  syslog:
+    interface: syslog
