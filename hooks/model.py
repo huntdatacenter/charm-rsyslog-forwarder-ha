@@ -47,7 +47,6 @@ class Server(Base):
             session.commit()
         except:
             session.rollback()
-            raise
 
     @classmethod
     def has_relation(cls, relation_id):

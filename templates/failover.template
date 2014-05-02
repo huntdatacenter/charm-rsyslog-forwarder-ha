@@ -1,4 +1,6 @@
-*.*   @@master.private_address:10514
+#this requires TCP to be enabled on rsyslog
+
+*.*   @@{{master.private_address}}:10514
 
 $ActionExecOnlyWhenPreviousIsSuspended on
 {% for server in slaves %}

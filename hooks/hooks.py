@@ -49,8 +49,6 @@ def update_failover_replication(servers):
     Set the configuration file to failover
     """
     def _master_selection(servers):
-        #This should be configurable, for now, just the first one
-        #would be the master
         return servers[0], servers[1:]
 
     master, slaves = _master_selection(servers)
@@ -77,9 +75,8 @@ def update_replication():
     servers = session.query(Server).all()
 
     if not len(servers):
-        hookenv.log("No servers found for update replication config",
-                    hookenv.ERROR)
-        sys.exit(1)
+        hookenv.log("Ready for add rsyslog relations to this forwarder")
+        sys.exit(0)
 
     mode = hookenv.config('replication-mode')
 
@@ -88,7 +85,7 @@ def update_replication():
 
     if mode == 'failover':
         if not len(servers) >= 2:
-            __die(
+            hookenv.log(
                 "Cannot use failover replication without a secondary server,"
                 " switching to fanout")
             update_fanout_replication(servers)
@@ -134,20 +131,20 @@ def syslog_relation_joined():
         session.commit()
     except Exception:
         session.rollback()
-        __die("Cannot create server on database")
+        __die("Cannot create server relation")
 
     update_replication()
 
 
 @hooks.hook()
 def syslog_relation_departed():
-    Server.remove_relation(hookenv.relation_id())
+    Server.remove(hookenv.relation_id())
     update_replication()
 
 
 @hooks.hook()
 def syslog_relation_broken():
-    Server.remove_relation(hookenv.relation_id())
+    Server.remove(hookenv.relation_id())
     update_replication()
 
 
