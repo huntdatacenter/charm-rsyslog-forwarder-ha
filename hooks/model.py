@@ -3,13 +3,6 @@
 
 __author__ = 'Jorge Niedbalski R. <jorge.niedbalski@canonical.com>'
 
-from charmhelpers import fetch
-
-try:
-    import sqlalchemy
-except ImportError:
-    fetch.apt_install("python-sqlalchemy")
-
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine

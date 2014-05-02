@@ -10,8 +10,11 @@ from charmhelpers import fetch
 try:
     from jinja2 import Environment, FileSystemLoader
 except ImportError:
-    fetch.apt_install("python-jinja2")
-    from jinja2 import Environment, FileSystemLoader
+    try:
+        fetch.apt_install("python-jinja2")
+        from jinja2 import Environment, FileSystemLoader
+    except:
+        pass
 
 import os
 import sys
