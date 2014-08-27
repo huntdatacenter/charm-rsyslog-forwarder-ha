@@ -142,10 +142,13 @@ def install():
 
 @hooks.hook()
 def syslog_relation_joined():
-    relation = relation_id()
+    try:
+        relation = relation_id()
+    except Exception as ex:
+        die("Cannot get syslog relation id: %s" % ex.message)
 
-    if Server.has_relation(relation_id):
-        die("Relation %s already exists" % relation_id)
+    if Server.has_relation(relation):
+        die("Relation %s already exists" % relation)
 
     server = Server(relation_id=relation,
                     remote_unit=remote_unit(),

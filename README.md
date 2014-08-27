@@ -1,15 +1,22 @@
 # General
 
-This Charm provides support for adding a [rsyslog](http://www.rsyslog.org) forwarder listener to any service 
+This Charm provides support for adding a [rsyslog](http://www.rsyslog.org) forwarder listener to any service
 in addition this charm allows to have multiple rsyslog aggregators servers offering currently 2 replication
 modes ( fanout, failover ).
 
 # Usage method
 
-This is a subordinate charm, which means it requires to have a service to hook in.
+This is a subordinate charm, which means it requires to have a service to hook in. On this
+example we are going to deploy mysql
 
 ```shell
     juju deploy mysql
+```
+
+Then you must deploy this charm
+
+```shell
+    juju deploy rsyslog-forwarder-ha
 ```
 
 Once your service is running, you can relate this charm:
@@ -32,7 +39,7 @@ Once your rsyslog aggregators are ready, you can relate them with your forwarder
     juju add-relation rsyslog-forwarder-ha secondary
 ```
 
-By default the 'fanout' replication mode is going to be used, which means that all the 
+By default the 'fanout' replication mode is going to be used, which means that all the
 syslog messages will be forwarder to any aggregator server using UDP port 514.
 
 In you want to choose to failover mode, this will require that your current
