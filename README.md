@@ -1,56 +1,48 @@
 # General
 
-This Charm provides support for adding a [rsyslog](http://www.rsyslog.org) forwarder listener to any service
-in addition this charm allows to have multiple rsyslog aggregators servers offering currently 2 replication
+This Charm provides support for adding a [rsyslog](http://www.rsyslog.org) forwarder listener to any service.
+In addition, this charm allows to have multiple rsyslog aggregators servers using two different replication
 modes ( fanout, failover ).
+
+By default the 'fanout' replication mode is going to be used, which means that all the
+syslog messages will be forwarder to any aggregator server using UDP port 514.
+
+Failover mode will forward all the syslog messages to the primary rsyslog server and
+in case of failure will use the secondary rsyslog server.
+
+In you want to choose to failover mode, this will require that your current
+rsyslog server is binded to TCP port 514.
 
 # Usage method
 
 This is a subordinate charm, which means it requires to have a service to hook in. On this
 example we are going to deploy mysql
 
-```shell
     juju deploy mysql
-```
 
 Then you must deploy this charm
 
-```shell
     juju deploy rsyslog-forwarder-ha
-```
 
 Once your service is running, you can relate this charm:
 
-```shell
     juju add-relation rsyslog-forwarder-ha mysql
-```
 
 Then you can deploy your rsyslog aggregators servers:
 
-```shell
     juju deploy rsyslog primary
     juju deploy rsyslog secondary
-```
 
 Once your rsyslog aggregators are ready, you can relate them with your forwarder.
 
-```shell
     juju add-relation rsyslog-forwarder-ha primary
     juju add-relation rsyslog-forwarder-ha secondary
-```
 
-By default the 'fanout' replication mode is going to be used, which means that all the
-syslog messages will be forwarder to any aggregator server using UDP port 514.
-
-In you want to choose to failover mode, this will require that your current
-rsyslog servers is binded to TCP port 514.
 
 Once you have your rsyslog ports opened. You can change the replication-mode variable
 on your rsyslog-forwarder-ha charm.
 
-```shell
     juju set rsyslog-forwarder-ha replication-mode="failover"
-```
 
 # Contact Information
 
