@@ -45,6 +45,7 @@ from utils import __die as die
 
 required_packages = [
     'rsyslog',
+    'rsyslog-relp',
     'python-jinja2',
     'python-sqlalchemy'
 ]
@@ -79,8 +80,9 @@ def update_failover_replication(servers):
     with open(REPLICATION_FILE, 'w') as fd:
         fd.write(get_template('failover').render(
             **{
+                'protocol': config_get('protocol'),
                 'master': master,
-                'slaves': slaves
+                'slaves': slaves,
             }))
 
 
@@ -91,7 +93,8 @@ def update_fanout_replication(servers):
     with open(REPLICATION_FILE, 'w') as fd:
         fd.write(get_template('fanout').render(
             **{
-                'servers': servers
+                'protocol': config_get('protocol'),
+                'servers': servers,
             }))
 
 

@@ -66,6 +66,7 @@ class HooksTestCase(unittest.TestCase):
 
         expected = [
             mock.call("rsyslog", fatal=True),
+            mock.call("rsyslog-relp", fatal=True),
             mock.call("python-jinja2", fatal=True),
             mock.call("python-sqlalchemy", fatal=True),
         ]
