@@ -14,7 +14,7 @@ class RsyslogForwarder(unittest.TestCase):
         pass
 
     def test_deployment_single(self):
-        """Test a deployment with no replication-mode set"""
+        """Test a rsyslog-forwarder-ha deployment"""
         self.deployment = amulet.Deployment(series="precise",
                                             sentries=False)
 
@@ -34,16 +34,8 @@ class RsyslogForwarder(unittest.TestCase):
         self.deployment.expose("rsyslog-master")
         self.deployment.expose("rsyslog-slave")
 
-        seconds = 300
-        try:
-            self.deployment.setup(timeout=seconds)
-        except amulet.helpers.TimeoutError:
-            message = 'The environment did not setup in %d seconds.' % seconds
-            amulet.raise_status(amulet.SKIP, msg=message)
-        except:
-            raise
-
-        self.deployment.cleanup()
+        self.deployment.setup(timeout=600)
+        self.deployment.sentry.wait(timeout=600)
 
 
 if __name__ == "__main__":
