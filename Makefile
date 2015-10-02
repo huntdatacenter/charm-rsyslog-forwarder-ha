@@ -6,14 +6,10 @@ build: sync-charm-helpers lint
 lint:
 	@flake8 --exclude hooks/charmhelpers --ignore=E125,F401 hooks
 
-functional:
-	@PYTHONPATH=$(PYTHON_PATH):hooks/ nosetests --nologcapture tests/functional/
-
-unit:
-	#@pip install -r test_requirements.txt
+test:
+	@dpkg -s python-apt > /dev/null || sudo apt-get install python-apt
+	@sudo pip install -r test_requirements.txt
 	@PYTHONPATH=$(PYTHON_PATH):hooks/ nosetests --nologcapture tests/unit
-
-test: functional unit
 
 bin/charm_helpers_sync.py:
 	@bzr cat lp:charm-helpers/tools/charm_helpers_sync/charm_helpers_sync.py > bin/charm_helpers_sync.py
