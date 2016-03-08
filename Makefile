@@ -4,7 +4,7 @@ PYTHON := /usr/bin/env python
 build: sync-charm-helpers lint
 
 lint:
-	@flake8 --exclude hooks/charmhelpers --ignore=E125,F401 hooks
+	@flake8 --exclude hooks/charmhelpers --ignore=E125,F401,E402 hooks
 
 test:
 	@dpkg -s python-apt > /dev/null || sudo apt-get install python-apt
