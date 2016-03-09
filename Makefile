@@ -7,9 +7,9 @@ lint:
 	@flake8 --exclude hooks/charmhelpers --ignore=E125,F401,E402 hooks
 
 test:
-	@dpkg -s python-apt > /dev/null || sudo apt-get install python-apt
-	@sudo pip install -r test_requirements.txt
-	@PYTHONPATH=$(PYTHON_PATH):hooks/ nosetests --nologcapture tests/unit
+	@dpkg -s python-tox > /dev/null || sudo apt-get install -yq python-tox
+	@dpkg -s python-apt > /dev/null || sudo apt-get install -yq python-apt
+	@tox
 
 bin/charm_helpers_sync.py:
 	@bzr cat lp:charm-helpers/tools/charm_helpers_sync/charm_helpers_sync.py > bin/charm_helpers_sync.py
