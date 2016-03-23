@@ -5,7 +5,7 @@ In addition, this charm allows to have multiple rsyslog aggregators servers usin
 modes ( fanout, failover ).
 
 By default the 'fanout' replication mode is going to be used, which means that all the
-syslog messages will be forwarder to any aggregator server using UDP port 514.
+syslog messages will be forwarder to all aggregator servers.
 
 Failover mode will forward all the syslog messages to the primary rsyslog server and
 in case of failure will use the secondary rsyslog server.

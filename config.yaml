@@ -6,8 +6,8 @@ options:
   replication-mode:
     type: string
     default: fanout
-    description: Possible options are 'fanout' or 'failover' fanout replicates the log messages over all the defined syslog relations, failover replicates the log messages just if the previous server is down.
+    description: Possible options are 'fanout' or 'failover' fanout replicates the log messages over all the defined syslog relations, failover replicates the log messages just if the previous server is down. Failover always uses tcp for the protocol.
   protocol:
     type: string
     default: "udp"
-    description: "transport protocol to use, currently supported options: udp, relp"
+    description: "transport protocol to use, currently supported options: udp, relp, tcp"

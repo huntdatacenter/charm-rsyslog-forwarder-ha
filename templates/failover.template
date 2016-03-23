@@ -1,10 +1,10 @@
-#this requires TCP to be enabled on rsyslog
+#this requires TCP is the protocol to be enabled on rsyslog
 
-*.*   @@{{master.private_address}}:10514
+*.*   @@{{master.private_address}}:514
 
 $ActionExecOnlyWhenPreviousIsSuspended on
 {% for server in slaves %}
-& @@{{server.private_address}}:10514
+& @@{{server.private_address}}:514
 {% endfor %}
 & /var/log/localbuffer
 $ActionExecOnlyWhenPreviousIsSuspended off
