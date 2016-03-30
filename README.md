@@ -13,6 +13,9 @@ in case of failure will use the secondary rsyslog server.
 In you want to choose to failover mode, this will require that your current
 rsyslog server is binded to TCP port 514.
 
+The charm can also optionally watch log files from apps which don't use syslog and forward those
+log entries also. By default it will watch apt and dpkg log files.
+
 # Usage method
 
 This is a subordinate charm, which means it requires to have a service to hook in. On this

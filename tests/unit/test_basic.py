@@ -33,8 +33,8 @@ TO_PATCH = [
     "update_local_logs",
     "config_get",
     "get_template_dir",
-    "update_local_logs",
-    "sys"
+    "sys",
+    "update_imfile",
 ]
 
 
@@ -47,6 +47,7 @@ class HooksTestCase(unittest.TestCase):
         self.juju_log.return_value = True
         self.apt_install.return_value = True
         self.update_local_logs.return_value = True
+        self.update_imfile.return_value = True
         self.get_template_dir.return_value = True
 
     def patch(self, method):
@@ -127,6 +128,7 @@ class HooksTestCase(unittest.TestCase):
     def test_config_changed(self, replication):
         """check if config_changed hook works"""
         self.update_local_logs.assert_called_once()
+        self.update_imfile.assert_called_once()
         replication.assert_called_once()
 
     @mock.patch("hooks.hooks.update_failover_replication")
