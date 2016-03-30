@@ -197,7 +197,7 @@ def upgrade_charm():
 @hooks.hook()
 def config_changed():
     update_local_logs(config_get("log-locally"))
-    update_imfile(config_get("watch-files"))
+    update_imfile(config_get("watch-files").split())
     update_replication()
 
 
