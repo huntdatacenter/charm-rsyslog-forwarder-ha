@@ -11,3 +11,8 @@ options:
     type: string
     default: "udp"
     description: "transport protocol to use, currently supported options: udp, relp, tcp"
+  watch-files:
+    type: string
+    default: "/var/log/dpkg.log /var/log/apt/history.log"
+    description: "A space separated list of files to follow with rsyslog imfile and forward to the aggregator. If set to empty string no files will be watched with imfile."
+

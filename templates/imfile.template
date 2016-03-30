@@ -1,0 +1,9 @@
+module(load="imfile")
+
+# Note StateFile is deprecated in rsyslog 8 but needed for rsyslog 7
+{% for path in imfiles %}
+input(type="imfile"
+      File="{{ path }}"
+      StateFile="{{ path.split('/')[-1] }}"
+      Tag="{{ path.split('/')[-1] }}")
+{% endfor %}

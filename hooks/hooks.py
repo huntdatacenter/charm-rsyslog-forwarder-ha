@@ -51,12 +51,23 @@ required_packages = [
 ]
 
 
+IMFILE_FILE = '/etc/rsyslog.d/75-rsyslog-imfile.conf'
 LOGS_TEMPLATE = 'keep_local.template'
 LOGS_SYSTEM_FILE = '/etc/rsyslog.d/81-local.conf'
 REPLICATION_FILE = '/etc/rsyslog.d/80-rsyslog-replication.conf'
 
 
 hooks = Hooks()
+
+
+def update_imfile(imfiles):
+    if imfiles == []:
+        if os.path.exists(IMFILE_FILE):
+            os.remove(IMFILE_FILE)
+        return
+
+    with open(IMFILE_FILE, 'w') as fd:
+        fd.write(get_template('imfile').render(imfiles=imfiles))
 
 
 def update_local_logs(keep=True):
@@ -186,6 +197,7 @@ def upgrade_charm():
 @hooks.hook()
 def config_changed():
     update_local_logs(config_get("log-locally"))
+    update_imfile(config_get("watch-files").split())
     update_replication()
 
 
