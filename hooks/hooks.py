@@ -26,6 +26,7 @@ from charmhelpers.core.hookenv import (
     remote_unit,
     relation_get,
 )
+from charmhelpers.contrib.charmsupport import nrpe
 
 from charmhelpers.fetch import (
     apt_install
@@ -78,6 +79,18 @@ def update_local_logs(keep=True):
     else:
         if os.path.exists(LOGS_SYSTEM_FILE):
             os.remove(LOGS_SYSTEM_FILE)
+
+
+@hooks.hook("nrpe-external-master-relation-changed")
+@hooks.hook("local-monitors-relation-changed")
+def update_nrpe_config():
+    nrpe_compat = nrpe.NRPE()
+    nrpe_compat.add_check(
+        shortname = "rsyslog",
+        description = "Check rsyslog is running",
+        check_cmd = "check_procs -c 1: -C rsyslogd"
+    )
+    nrpe_compat.write()
 
 
 def update_failover_replication(servers):
@@ -199,6 +212,7 @@ def config_changed():
     update_local_logs(config_get("log-locally"))
     update_imfile(config_get("watch-files").split())
     update_replication()
+    update_nrpe_config()
 
 
 if __name__ == "__main__":
