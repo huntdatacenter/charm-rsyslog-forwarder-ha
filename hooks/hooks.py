@@ -155,7 +155,14 @@ def start():
 
 @hooks.hook()
 def stop():
-    service_stop("rsyslog")
+    # Remove any specific logfiles
+    for conf_file in (IMFILE_FILE, REPLICATION_FILE):
+        if os.path.exists(conf_file):
+            os.remove(conf_file)
+
+    # Unfortunately rsyslog reconfigure does not restore the default config so just put ours in place
+    update_local_logs(True)
+    service_restart("rsyslog")
 
 
 @hooks.hook()
