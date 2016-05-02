@@ -54,7 +54,7 @@ required_packages = [
 
 IMFILE_FILE = '/etc/rsyslog.d/75-rsyslog-imfile.conf'
 LOGS_TEMPLATE = 'keep_local.template'
-LOGS_SYSTEM_FILE = '/etc/rsyslog.d/81-local.conf'
+LOGS_SYSTEM_FILE = '/etc/rsyslog.d/50-default.conf'
 REPLICATION_FILE = '/etc/rsyslog.d/80-rsyslog-replication.conf'
 
 
