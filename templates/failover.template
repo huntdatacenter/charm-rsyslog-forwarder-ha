@@ -3,8 +3,9 @@
 # Explicitly set the tcp protocol to avoid collisions with
 # other config such as that used by Juju controllers
 $ActionSendStreamDriver ptcp
-$ActionQueueType LinkedList
+$ActionSendStreamDriverMode 0
 
+$ActionQueueType LinkedList
 # Drop low priority messages when queue is near to backing up
 $ActionQueueDiscardMark 9500
 $ActionQueueDiscardSeverity info
