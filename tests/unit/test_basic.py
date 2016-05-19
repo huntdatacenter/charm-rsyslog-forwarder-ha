@@ -27,7 +27,7 @@ TO_PATCH = [
     "service_restart",
     "remote_unit",
     "service_start",
-    "service_stop",
+    "service_restart",
     "juju_log",
     "Server",
     "update_local_logs",
@@ -88,10 +88,10 @@ class HooksTestCase(unittest.TestCase):
         self.service_start.assert_called_with("rsyslog")
 
     def test_stop_charm(self):
-        """Check if start hooks is correctly executed
+        """Check if rsyslog is returned to default config and restart executed
         """
         hooks.hooks.execute(['stop'])
-        self.service_stop.assert_called_with("rsyslog")
+        self.service_restart.assert_called_with("rsyslog")
 
     @mock.patch("hooks.hooks.update_replication")
     def test_syslog_relation_joined(self, replication):

@@ -86,9 +86,9 @@ def update_local_logs(keep=True):
 def update_nrpe_config():
     nrpe_compat = nrpe.NRPE()
     nrpe_compat.add_check(
-        shortname = "rsyslog",
-        description = "Check rsyslog is running",
-        check_cmd = "check_procs -c 1: -C rsyslogd"
+        shortname="rsyslog",
+        description="Check rsyslog is running",
+        check_cmd="check_procs -c 1: -C rsyslogd"
     )
     nrpe_compat.write()
 
@@ -160,7 +160,8 @@ def stop():
         if os.path.exists(conf_file):
             os.remove(conf_file)
 
-    # Unfortunately rsyslog reconfigure does not restore the default config so just put ours in place
+    # Unfortunately rsyslog reconfigure does not restore the default config
+    # so just put ours in place
     update_local_logs(True)
     service_restart("rsyslog")
 
