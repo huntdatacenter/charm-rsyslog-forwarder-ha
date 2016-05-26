@@ -187,4 +187,6 @@ def config_changed():
 
 
 if __name__ == "__main__":
+    if sys.argv[0].split('/')[-1] == 'hooks.py':
+        del sys.argv[0]
     hooks.execute(sys.argv)
