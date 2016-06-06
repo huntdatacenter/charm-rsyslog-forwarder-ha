@@ -1,1 +1,9 @@
-hooks.py
+#!/bin/sh
+
+set -eu
+
+juju-log 'Ensuring dependencies are installed'
+apt-get install -y python python-apt python-yaml python-sqlalchemy
+
+juju-log 'Invoking python-based install hook'
+python hooks/hooks.py install
