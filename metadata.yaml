@@ -5,6 +5,10 @@ summary: forwards local syslog to multiple remote syslog servers.
 tags: ["system"]
 description: |
   Uses rsyslogs facilities to forward to multiple remote syslog servers.
+provides:
+  nrpe-external-master:
+    interface: nrpe-external-master
+    scope: container
 requires:
   juju-info:
     interface: juju-info
