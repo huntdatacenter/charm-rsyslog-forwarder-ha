@@ -15,7 +15,7 @@ class RsyslogForwarder(unittest.TestCase):
 
     def test_deployment_single(self):
         """Test a rsyslog-forwarder-ha deployment"""
-        self.deployment = amulet.Deployment(series="precise",
+        self.deployment = amulet.Deployment(series="trusty",
                                             sentries=False)
 
         self.deployment.add("rsyslog-master", charm="rsyslog")
@@ -29,7 +29,8 @@ class RsyslogForwarder(unittest.TestCase):
         self.deployment.relate("rsyslog-forwarder-ha:syslog",
                                "rsyslog-slave:aggregator")
 
-        self.deployment._relate("postgresql", "rsyslog-forwarder-ha")
+        self.deployment.relate("postgresql:juju-info",
+                               "rsyslog-forwarder-ha:juju-info")
 
         self.deployment.expose("rsyslog-master")
         self.deployment.expose("rsyslog-slave")
