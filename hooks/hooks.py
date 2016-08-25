@@ -52,10 +52,10 @@ required_packages = [
 ]
 
 
-IMFILE_FILE = '/etc/rsyslog.d/75-rsyslog-imfile.conf'
+IMFILE_FILE = '/etc/rsyslog.d/40-rsyslog-imfile.conf'
 LOGS_TEMPLATE = 'keep_local.template'
 LOGS_SYSTEM_FILE = '/etc/rsyslog.d/50-default.conf'
-REPLICATION_FILE = '/etc/rsyslog.d/80-rsyslog-replication.conf'
+REPLICATION_FILE = '/etc/rsyslog.d/45-rsyslog-replication.conf'
 
 
 hooks = Hooks()

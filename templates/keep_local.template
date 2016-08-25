@@ -1,9 +1,10 @@
 # Some defaults
 auth,authpriv.*                 /var/log/auth.log
+kern.*                          -/var/log/kern.log
+& ~
 *.*;auth,authpriv.none          -/var/log/syslog
 cron.*                         /var/log/cron.log
 daemon.*                        -/var/log/daemon.log
-kern.*                          -/var/log/kern.log
 lpr.*                           -/var/log/lpr.log
 mail.*                          -/var/log/mail.log
 user.*                          -/var/log/user.log
