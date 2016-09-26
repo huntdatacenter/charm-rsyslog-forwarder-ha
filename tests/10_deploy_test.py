@@ -15,25 +15,18 @@ class RsyslogForwarder(unittest.TestCase):
 
     def test_deployment_single(self):
         """Test a rsyslog-forwarder-ha deployment"""
-        self.deployment = amulet.Deployment(series="trusty",
+        self.deployment = amulet.Deployment(series="xenial",
                                             sentries=False)
 
-        self.deployment.add("rsyslog-master", charm="rsyslog")
-        self.deployment.add("rsyslog-slave", charm="rsyslog")
-        self.deployment.add("rsyslog-forwarder-ha")
-        self.deployment.add("postgresql")
+        self.deployment.add("cs:trusty/rsyslog")
+        self.deployment.add("cs:~bigdata-dev/xenial/rsyslog-forwarder-ha")
+        self.deployment.add("cs:xenial/ubuntu")
 
         self.deployment.relate("rsyslog-forwarder-ha:syslog",
-                               "rsyslog-master:aggregator")
+                               "rsyslog:aggregator")
 
-        self.deployment.relate("rsyslog-forwarder-ha:syslog",
-                               "rsyslog-slave:aggregator")
-
-        self.deployment.relate("postgresql:juju-info",
+        self.deployment.relate("ubuntu:juju-info",
                                "rsyslog-forwarder-ha:juju-info")
-
-        self.deployment.expose("rsyslog-master")
-        self.deployment.expose("rsyslog-slave")
 
         self.deployment.setup(timeout=600)
         self.deployment.sentry.wait(timeout=600)
