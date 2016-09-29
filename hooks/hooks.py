@@ -183,7 +183,14 @@ def syslog_relation_joined():
         die("Cannot get syslog relation id: %s" % ex.message)
 
     if Server.has_relation(relation):
-        die("Relation %s already exists" % relation)
+        # If multiple principal apps are colocated on a single machine,
+        # log it and return. There is no need to reconfigure rsyslogd if it
+        # has already been done by another principal application.
+        # NB: if colocated principal apps are to be connected to *different*
+        # rsyslog aggregators, we will have a problem since we are skipping
+        # any rsyslogd configuration after the 1st syslog relation is joined.
+        juju_log("Relation %s already exists" % relation)
+        return
 
     server = Server(relation_id=relation,
                     remote_unit=remote_unit(),
