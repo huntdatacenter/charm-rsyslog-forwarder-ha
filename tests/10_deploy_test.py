@@ -12,15 +12,12 @@ class RsyslogForwarder(unittest.TestCase):
     def setUpClass(cls):
         cls.d = amulet.Deployment(series='xenial')
 
-        cls.d.add("cs:~bigdata-dev/xenial/rsyslog")
-        cls.d.add("cs:~bigdata-dev/xenial/rsyslog-forwarder-ha")
+        cls.d.add("rsyslog", "cs:~bigdata-dev/xenial/rsyslog")
+        cls.d.add("rsyslog-forwarder-ha", "cs:~bigdata-dev/xenial/rsyslog-forwarder-ha")
         cls.d.add("syslog-source", "cs:xenial/ubuntu")
 
-        cls.d.relate("rsyslog-forwarder-ha:syslog",
-                     "rsyslog:aggregator")
-
-        cls.d.relate("syslog-source:juju-info",
-                     "rsyslog-forwarder-ha:juju-info")
+        cls.d.relate("rsyslog-forwarder-ha:syslog", "rsyslog:aggregator")
+        cls.d.relate("syslog-source:juju-info", "rsyslog-forwarder-ha:juju-info")
 
         cls.d.setup(timeout=600)
         cls.d.sentry.wait(timeout=600)
