@@ -1,4 +1,6 @@
+flake8
 pytest
 PyYAML==3.10
 SQLAlchemy==0.9.4
 mock==1.0.1
+six
