@@ -12,7 +12,7 @@ class RsyslogForwarder(unittest.TestCase):
     def setUpClass(cls):
         cls.d = amulet.Deployment(series='xenial')
 
-        cls.d.add("cs:trusty/rsyslog")
+        cls.d.add("cs:~bigdata-dev/xenial/rsyslog")
         cls.d.add("cs:~bigdata-dev/xenial/rsyslog-forwarder-ha")
         cls.d.add("syslog-source", "cs:xenial/ubuntu")
 

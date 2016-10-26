@@ -2,7 +2,9 @@ name: rsyslog-forwarder-ha
 maintainer: Jorge Niedbalski <jorge.niedbalski@canonical.com>
 subordinate: true
 summary: forwards local syslog to multiple remote syslog servers.
-tags: ["system"]
+tags:
+  - audits
+  - ops
 description: |
   Uses rsyslogs facilities to forward to multiple remote syslog servers.
 provides:
