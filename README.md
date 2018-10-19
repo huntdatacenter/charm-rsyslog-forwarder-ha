@@ -49,4 +49,5 @@ on your rsyslog-forwarder-ha charm.
 
 # Contact Information
 
-    Mantainer: jorge.niedbalski@canonical.com
+    Mantainer: rsyslog-charmers@lists.launchpad.net
+    Bugs: https://bugs.launchpad.net/rsyslog-charm

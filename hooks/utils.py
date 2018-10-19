@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'Jorge Niedbalski R. <jorge.niedbalski@canonical.com>'
-
-
 from charmhelpers.core import hookenv
 from charmhelpers import fetch
 

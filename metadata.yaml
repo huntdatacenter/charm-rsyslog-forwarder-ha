@@ -1,12 +1,15 @@
 name: rsyslog-forwarder-ha
-maintainer: Jorge Niedbalski <jorge.niedbalski@canonical.com>
+maintainer: rsyslog-charmers <rsyslog-charmers@lists.launchpad.net>
 subordinate: true
 summary: forwards local syslog to multiple remote syslog servers.
+description: |
+  Uses rsyslogs facilities to forward to multiple remote syslog servers.
 tags:
   - audits
   - ops
-description: |
-  Uses rsyslogs facilities to forward to multiple remote syslog servers.
+series:
+  - xenial
+  - trusty
 provides:
   nrpe-external-master:
     interface: nrpe-external-master

@@ -24,13 +24,8 @@ test: apt_prereqs
 	@tox
 
 bin/charm_helpers_sync.py:
-	@bzr cat lp:charm-helpers/tools/charm_helpers_sync/charm_helpers_sync.py > bin/charm_helpers_sync.py
+	@mkdir -p bin
+	@curl -o bin/charm_helpers_sync.py https://raw.githubusercontent.com/juju/charm-helpers/master/tools/charm_helpers_sync/charm_helpers_sync.py
 
-sync-charm-helpers: bin/charm_helpers_sync.py
+sync: bin/charm_helpers_sync.py
 	@$(PYTHON) bin/charm_helpers_sync.py -c charm-helpers.yaml
-
-.PHONY: deploy
-deploy:
-	@echo Deploying rsyslog-forwarder-ha
-	@juju deploy .
-	@echo See the README for explorations after deploying.

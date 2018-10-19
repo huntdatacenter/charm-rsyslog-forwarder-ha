@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'Jorge Niedbalski R. <jorge.niedbalski@canonical.com>'
-
 import os
 import sys
 
