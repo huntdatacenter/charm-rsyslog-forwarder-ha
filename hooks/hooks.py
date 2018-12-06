@@ -85,7 +85,6 @@ def update_certfile():
         return
 
     with open(CERT_FILE, 'w') as fd:
-#        fd.write(get_template('certificate').render(certfiles=certfiles))
         fd.write(get_template('certificate').render())
 
 def update_imfile(imfiles):
@@ -199,14 +198,6 @@ def install():
         apt_install(package, fatal=True)
 
     update_certfile()
-#    print(config_get("cert"))
-#    if config_get('cert') and len(config_get('cert')) > 0:
-#        subprocess.check_output(['mkdir','-pv','/etc/rsyslog.d/keys/ca.d'])
-#        encoded_cert=config_get('cert')
-#        cert=base64.b64decode(encoded_cert)
-#        with open("/etc/rsyslog.d/keys/ca.d/rsyslog.crt","w") as c:
-#            c.write(cert)
-#            c.close()
     update_local_logs(
         keep=config_get('log-locally'))
 
