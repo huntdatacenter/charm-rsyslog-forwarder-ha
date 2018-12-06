@@ -1,0 +1,4 @@
+$DefaultNetstreamDriverCAFile /etc/rsyslog.d/keys/ca.d/rsyslog.crt
+$DefaultNetstreamDriver gtls
+$ActionSendStreamDriverMode 1
+$ActionSendStreamDriverAuthMode anon

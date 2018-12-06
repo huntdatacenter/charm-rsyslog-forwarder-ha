@@ -70,6 +70,7 @@ class HooksTestCase(unittest.TestCase):
             mock.call("rsyslog-relp", fatal=True),
             mock.call("python-jinja2", fatal=True),
             mock.call("python-sqlalchemy", fatal=True),
+            mock.call("rsyslog-gnutls", fatal=True),
         ]
 
         self.assertEquals(sorted(self.apt_install.call_args_list),

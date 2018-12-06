@@ -8,6 +8,7 @@ tags:
   - audits
   - ops
 series:
+  - bionic
   - xenial
   - trusty
 provides:
