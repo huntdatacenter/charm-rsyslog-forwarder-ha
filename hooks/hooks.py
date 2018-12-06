@@ -42,11 +42,15 @@ from model import Server, session
 from utils import get_template_dir, get_template
 from utils import __die as die
 
+import base64
+import subprocess
+
 required_packages = [
     'rsyslog',
     'rsyslog-relp',
     'python-jinja2',
-    'python-sqlalchemy'
+    'python-sqlalchemy',
+    'rsyslog-gnutls'
 ]
 
 
@@ -54,10 +58,35 @@ IMFILE_FILE = '/etc/rsyslog.d/40-rsyslog-imfile.conf'
 LOGS_TEMPLATE = 'keep_local.template'
 LOGS_SYSTEM_FILE = '/etc/rsyslog.d/50-default.conf'
 REPLICATION_FILE = '/etc/rsyslog.d/45-rsyslog-replication.conf'
-
+CERT_FILE = '/etc/rsyslog.d/42-cert-rsyslog.conf'
 
 hooks = Hooks()
 
+
+def update_certfile():
+    # Check:
+    # https://www.rsyslog.com/doc/master/tutorials/tls.html?highlight=defaultnetstreamdrivercafile
+    if config_get('cert'):
+        if len(config_get('cert')) > 0:
+            subprocess.check_output(['mkdir','-pv','/etc/rsyslog.d/keys/ca.d'])
+            encoded_cert=config_get('cert')
+            cert=base64.b64decode(encoded_cert)
+            with open("/etc/rsyslog.d/keys/ca.d/rsyslog.crt","w") as c:
+                c.write(cert)
+                c.close()
+
+    if not config_get('cert'):
+        if os.path.exists(CERT_FILE):
+            os.remove(CERT_FILE)
+        return
+    if len(config_get('cert')) == 0:
+        if os.path.exists(CERT_FILE):
+            os.remove(CERT_FILE)
+        return
+
+    with open(CERT_FILE, 'w') as fd:
+#        fd.write(get_template('certificate').render(certfiles=certfiles))
+        fd.write(get_template('certificate').render())
 
 def update_imfile(imfiles):
     if imfiles == []:
@@ -169,6 +198,15 @@ def install():
     for package in required_packages:
         apt_install(package, fatal=True)
 
+    update_certfile()
+#    print(config_get("cert"))
+#    if config_get('cert') and len(config_get('cert')) > 0:
+#        subprocess.check_output(['mkdir','-pv','/etc/rsyslog.d/keys/ca.d'])
+#        encoded_cert=config_get('cert')
+#        cert=base64.b64decode(encoded_cert)
+#        with open("/etc/rsyslog.d/keys/ca.d/rsyslog.crt","w") as c:
+#            c.write(cert)
+#            c.close()
     update_local_logs(
         keep=config_get('log-locally'))
 
@@ -224,6 +262,7 @@ def upgrade_charm():
 def config_changed():
     update_local_logs(config_get("log-locally"))
     update_imfile(config_get("watch-files").split())
+    update_certfile()
     update_replication()
     update_nrpe_config()
 

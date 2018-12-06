@@ -1,4 +1,8 @@
 options:
+  cert:
+    type: string
+    default: ""
+    description: TLS certificate in base64 format to access rsyslog server
   log-locally:
     type: boolean
     default: false
