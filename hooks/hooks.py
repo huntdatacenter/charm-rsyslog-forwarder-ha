@@ -149,7 +149,18 @@ def update_fanout_replication(servers):
 
 
 def update_replication():
+    server_list = config_get('forward_hosts')
     servers = session.query(Server).all()
+    if server_list:
+        for server_pair in server_list.split(','):
+            if len(server_pair.split('=')) != 2:
+                juju_log("Wrong forward_hosts option, missing "
+                         "hostname=address format, found: {}".format(server_pair))
+                continue
+            server = Server()
+            [server.remote_unit,
+             server.private_address] = server_pair.split('=')
+            servers.append(server)
 
     if not len(servers):
         juju_log("Ready for add rsyslog relations to this forwarder")

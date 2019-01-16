@@ -50,4 +50,4 @@ on your rsyslog-forwarder-ha charm.
 # Contact Information
 
     Mantainer: rsyslog-charmers@lists.launchpad.net
-    Bugs: https://bugs.launchpad.net/rsyslog-charm
+    Bugs: https://bugs.launchpad.net/rsyslog-forwarder-ha-charm
