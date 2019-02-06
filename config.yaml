@@ -35,4 +35,10 @@ options:
     type: string
     default: "/var/log/dpkg.log /var/log/apt/history.log"
     description: "A space separated list of files to follow with rsyslog imfile and forward to the aggregator. If set to empty string no files will be watched with imfile."
-
+  forward_hosts:
+    type: string
+    default:
+    description: >
+        A comma-separated list of key=value representing hostname and 
+        ip address of servers to forward all logs to as in
+        hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3

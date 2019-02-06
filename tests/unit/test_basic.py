@@ -185,3 +185,40 @@ class HooksTestCase(unittest.TestCase):
         fanout.assert_called_once()
 
         self.service_restart.assert_called_once_with("rsyslog")
+
+    @mock.patch("hooks.hooks.update_failover_replication")
+    @mock.patch("hooks.hooks.update_fanout_replication")
+    def test_update_replication_bad_charm_config(self, fanout, failover):
+        """rsyslog forwarding (malformed config check)"""
+
+        class DummyServer(object):
+            @classmethod
+            def all(self, *args, **kwargs):
+                return [{}, {}]
+
+        self.session.query.return_value = DummyServer()
+        self.config_get.return_value = 'wrong format'
+
+        hooks.update_replication()
+        args, kwargs = self.juju_log.call_args
+        assert "found: wrong format" in args[0]
+
+    @mock.patch("hooks.hooks.Server")
+    @mock.patch("hooks.hooks.update_failover_replication")
+    @mock.patch("hooks.hooks.update_fanout_replication")
+    def test_update_replication_good_charm_config(self, fanout, failover, Server):
+        """rsyslog forwarding (valid config options)"""
+
+        class DummyServer(object):
+            @classmethod
+            def all(self, *args, **kwargs):
+                return [{}, {}]
+
+        self.session.query.return_value = DummyServer()
+        self.config_get.return_value = \
+            'hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3'
+
+        hooks.update_replication()
+        self.assertEqual(Server.mock_calls, [
+            mock.call(), mock.call(), mock.call()
+        ])
