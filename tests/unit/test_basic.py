@@ -189,7 +189,7 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_failover_replication")
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_bad_charm_config(self, fanout, failover):
-        """check if update_replication works with fanout replication mode"""
+        """rsyslog forwarding (malformed config check)"""
 
         class DummyServer(object):
             @classmethod
@@ -207,7 +207,7 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_failover_replication")
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_good_charm_config(self, fanout, failover, Server):
-        """check if update_replication works with fanout replication mode"""
+        """rsyslog forwarding (valid config options)"""
 
         class DummyServer(object):
             @classmethod
@@ -219,4 +219,6 @@ class HooksTestCase(unittest.TestCase):
             'hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3'
 
         hooks.update_replication()
-        assert Server.called
+        self.assertEqual(Server.mock_calls, [
+            mock.call(), mock.call(), mock.call()
+        ])
