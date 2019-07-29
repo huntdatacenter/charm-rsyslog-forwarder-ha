@@ -14,7 +14,7 @@ $ActionQueueSaveOnShutdown on # save in-memory data if rsyslog shuts down
 {% elif protocol == "tcp" %}
 *.*   @@{{server.private_address}}:{{server.port}}
 {% else %}
-*.*   :omrelp:{{server.private_address}}:2514
+*.*   :omrelp:{{server.private_address}}:{{server.port}}
 {% endif %}
 
 {% endfor %}

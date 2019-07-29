@@ -163,7 +163,10 @@ def update_replication():
             if len(uri.split(':')) > 1:
                 server.port = uri.split(':')[1]
             else:
-                server.port = '514'
+                if config_get('protocol') == 'relp':
+                    server.port = '2514'
+                else:
+                    server.port = '514'
             servers.append(server)
 
     if not len(servers):
