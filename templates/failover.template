@@ -13,7 +13,7 @@ $ActionQueueDiscardSeverity info
 
 $ActionExecOnlyWhenPreviousIsSuspended on
 {% for server in slaves %}
-& @@{{server.private_address}}:514
+& @@{{server.private_address}}:{{server.port}}
 {% endfor %}
 & /var/log/localbuffer
 $ActionExecOnlyWhenPreviousIsSuspended off

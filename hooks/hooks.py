@@ -158,8 +158,15 @@ def update_replication():
                          "hostname=address format, found: {}".format(server_pair))
                 continue
             server = Server()
-            [server.remote_unit,
-             server.private_address] = server_pair.split('=')
+            [server.remote_unit, uri] = server_pair.split('=')
+            server.private_address = uri.split(':')[0]
+            if len(uri.split(':')) > 1:
+                server.port = uri.split(':')[1]
+            else:
+                if config_get('protocol') == 'relp':
+                    server.port = '2514'
+                else:
+                    server.port = '514'
             servers.append(server)
 
     if not len(servers):

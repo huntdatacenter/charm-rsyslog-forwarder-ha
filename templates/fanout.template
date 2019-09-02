@@ -10,11 +10,11 @@ $ActionQueueSaveOnShutdown on # save in-memory data if rsyslog shuts down
 
 # Forward everything
 {% if protocol == "udp" %}
-*.*   @{{server.private_address}}:514
+*.*   @{{server.private_address}}:{{server.port}}
 {% elif protocol == "tcp" %}
-*.*   @@{{server.private_address}}:514
+*.*   @@{{server.private_address}}:{{server.port}}
 {% else %}
-*.*   :omrelp:{{server.private_address}}:2514
+*.*   :omrelp:{{server.private_address}}:{{server.port}}
 {% endif %}
-	
+
 {% endfor %}

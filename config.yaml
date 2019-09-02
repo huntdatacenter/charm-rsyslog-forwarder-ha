@@ -39,6 +39,7 @@ options:
     type: string
     default:
     description: >
-        A comma-separated list of key=value representing hostname and 
+        A comma-separated list of key=value representing hostname and
         ip address of servers to forward all logs to as in
-        hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3
+        hostname1=host_ip1:port1,hostname2=host_ip2:port2,hostname3=host_ip3:port3
+        With no port specifed 514 will be used.
