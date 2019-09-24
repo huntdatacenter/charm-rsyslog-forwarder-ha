@@ -9,7 +9,7 @@ $ActionQueueType LinkedList
 # Drop low priority messages when queue is near to backing up
 $ActionQueueDiscardMark 9500
 $ActionQueueDiscardSeverity info
-*.*   @@{{master.private_address}}:514
+{{message_filter}}   @@{{master.private_address}}:514
 
 $ActionExecOnlyWhenPreviousIsSuspended on
 {% for server in slaves %}

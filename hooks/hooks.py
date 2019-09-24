@@ -133,6 +133,7 @@ def update_failover_replication(servers):
                 'protocol': config_get('protocol'),
                 'master': master,
                 'slaves': slaves,
+                'message_filter': config_get('message-filter'),
             }))
 
 
@@ -145,6 +146,7 @@ def update_fanout_replication(servers):
             **{
                 'protocol': config_get('protocol'),
                 'servers': servers,
+                'message_filter': config_get('message-filter'),
             }))
 
 
