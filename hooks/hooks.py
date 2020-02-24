@@ -153,6 +153,13 @@ def update_fanout_replication(servers):
 def update_replication():
     server_list = config_get('forward_hosts')
     servers = session.query(Server).all()
+    for server in servers:
+        if not server.port:
+            if config_get('protocol') == 'relp':
+                server.port = '2514'
+            else:
+                server.port = '514'
+
     if server_list:
         for server_pair in server_list.split(','):
             if len(server_pair.split('=')) != 2:
@@ -174,6 +181,7 @@ def update_replication():
     if not len(servers):
         juju_log("Ready for add rsyslog relations to this forwarder")
         sys.exit(0)
+
 
     mode = config_get('replication-mode')
 

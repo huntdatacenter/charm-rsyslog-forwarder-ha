@@ -20,6 +20,9 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
+PORT_COLUMN_CREATION = "ALTER TABLE server ADD COLUMN port INT";
+
+
 class Server(Base):
     __tablename__ = 'server'
 
@@ -28,6 +31,7 @@ class Server(Base):
     created = Column(DateTime, default=datetime.datetime.now)
     remote_unit = Column(String(250))
     private_address = Column(String(250))
+    port = Column(Integer)
 
     @classmethod
     def remove(cls, relation_id):
@@ -67,6 +71,7 @@ class Server(Base):
 
 def setup_local_database():
     Base.metadata.create_all(engine)
+    engine.execute(PORT_COLUMN_CREATION)
 
 try:
     setup_local_database()
