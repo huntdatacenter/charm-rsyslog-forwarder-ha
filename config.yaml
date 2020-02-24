@@ -5,7 +5,7 @@ options:
     description: TLS certificate in base64 format to access rsyslog server
   log-locally:
     type: boolean
-    default: false
+    default: true
     description: Should logs be written locally as well as forwarded?
   replication-mode:
     type: string
