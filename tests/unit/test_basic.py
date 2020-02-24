@@ -38,6 +38,30 @@ TO_PATCH = [
 ]
 
 
+class DummyServer(object):
+    def __init__(self):
+        self.port_value = "-1"
+
+    @property
+    def port(self):
+        return self.port_value
+
+    @port.setter
+    def port(self, value):
+        self.port_value = value
+
+
+class DummyServerList(object):
+    def __init__(self, empty=False):
+        if empty:
+            self.list = []
+        else:
+            self.list = [DummyServer(), DummyServer()]
+
+    def all(self, *args, **kwargs):
+        return self.list
+
+
 class HooksTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -136,12 +160,7 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_no_servers(self, failover, fanout):
         """check if update_replication works with no servers given"""
-        class DummyServer(object):
-            @classmethod
-            def all(self, *args, **kwargs):
-                return []
-
-        self.session.query.return_value = DummyServer()
+        self.session.query.return_value = DummyServerList(empty=True)
 
         hooks.update_replication()
 
@@ -154,23 +173,6 @@ class HooksTestCase(unittest.TestCase):
     def test_update_replication_failover(self, fanout, failover):
         """check if update_replication works with 2 servers in failover
         replication mode"""
-        class DummyServer(object):
-            def __init__(self):
-                self.port_value = "-1"
-
-            @property
-            def port(self):
-                return self.port_value
-
-            @port.setter
-            def port(self, value):
-                self.port_value = value
-
-        class DummyServerList(object):
-            @classmethod
-            def all(self, *args, **kwargs):
-                return [DummyServer(), DummyServer()]
-
         self.session.query.return_value = DummyServerList()
         self.config_get.return_value = 'failover'
 
@@ -183,23 +185,6 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_fanout(self, fanout, failover):
         """check if update_replication works with fanout replication mode"""
-        class DummyServer(object):
-            def __init__(self):
-                self.port_value = "-1"
-
-            @property
-            def port(self):
-                return self.port_value
-
-            @port.setter
-            def port(self, value):
-                self.port_value = value
-
-        class DummyServerList(object):
-            @classmethod
-            def all(self, *args, **kwargs):
-                return [DummyServer(), DummyServer()]
-
         self.session.query.return_value = DummyServerList()
         self.config_get.return_value = 'fanout'
 
@@ -212,23 +197,6 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_bad_charm_config(self, fanout, failover):
         """rsyslog forwarding (malformed config check)"""
-        class DummyServer(object):
-            def __init__(self):
-                self.port_value = "-1"
-
-            @property
-            def port(self):
-                return self.port_value
-
-            @port.setter
-            def port(self, value):
-                self.port_value = value
-
-        class DummyServerList(object):
-            @classmethod
-            def all(self, *args, **kwargs):
-                return [DummyServer(), DummyServer()]
-
         self.session.query.return_value = DummyServerList()
         self.config_get.return_value = 'wrong format'
 
@@ -241,23 +209,6 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_good_charm_config(self, fanout, failover, Server):
         """rsyslog forwarding (valid config options)"""
-        class DummyServer(object):
-            def __init__(self):
-                self.port_value = "-1"
-
-            @property
-            def port(self):
-                return self.port_value
-
-            @port.setter
-            def port(self, value):
-                self.port_value = value
-
-        class DummyServerList(object):
-            @classmethod
-            def all(self, *args, **kwargs):
-                return [DummyServer(), DummyServer()]
-
         self.session.query.return_value = DummyServerList()
         self.config_get.return_value = \
             'hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3'

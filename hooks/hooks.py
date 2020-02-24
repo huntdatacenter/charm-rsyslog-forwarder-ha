@@ -155,10 +155,7 @@ def update_replication():
     servers = session.query(Server).all()
     for server in servers:
         if not server.port:
-            if config_get('protocol') == 'relp':
-                server.port = '2514'
-            else:
-                server.port = '514'
+            server.port = "2514" if config_get("protocol") == "relp" else "514"
 
     if server_list:
         for server_pair in server_list.split(','):
