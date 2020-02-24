@@ -23,7 +23,7 @@ from charmhelpers.core.hookenv import (
     log as juju_log,
     remote_unit,
     relation_get,
-    status_set
+    status_set,
 )
 from charmhelpers.contrib.charmsupport import nrpe
 
