@@ -16,7 +16,7 @@ apt_prereqs:
 .PHONY: lint
 lint: apt_prereqs
 	@tox --notest
-	@PATH=.tox/py34/bin:.tox/py35/bin flake8 --exclude hooks/charmhelpers hooks
+	@PATH=.tox/py34/bin:.tox/py35/bin:.tox/py37/bin flake8 --exclude hooks/charmhelpers hooks
 	@charm proof
 
 .PHONY: test

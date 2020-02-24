@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from subprocess import CalledProcessError
+
 from charmhelpers.core import hookenv
 from charmhelpers import fetch
 
@@ -10,7 +12,7 @@ except ImportError:
     try:
         fetch.apt_install("python-jinja2")
         from jinja2 import Environment, FileSystemLoader
-    except:
+    except (ImportError, CalledProcessError):
         pass
 
 import os

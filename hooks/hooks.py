@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from subprocess import CalledProcessError
 import sys
 
 from shutil import copyfile
@@ -12,7 +13,6 @@ sys.path.insert(0, os.path.join(_HERE, 'charmhelpers'))
 
 from charmhelpers.core.host import (
     service_start,
-    service_stop,
     service_restart,
 )
 
@@ -35,7 +35,7 @@ try:
 except ImportError:
     try:
         apt_install("python-sqlalchemy")
-    except:
+    except CalledProcessError:
         pass
 
 from model import Server, session
@@ -68,10 +68,12 @@ def update_certfile():
     # https://www.rsyslog.com/doc/master/tutorials/tls.html?highlight=defaultnetstreamdrivercafile
     if config_get('cert'):
         if len(config_get('cert')) > 0:
-            subprocess.check_output(['mkdir','-pv','/etc/rsyslog.d/keys/ca.d'])
-            encoded_cert=config_get('cert')
-            cert=base64.b64decode(encoded_cert)
-            with open("/etc/rsyslog.d/keys/ca.d/rsyslog.crt","w") as c:
+            subprocess.check_output(
+                ['mkdir', '-pv', '/etc/rsyslog.d/keys/ca.d']
+            )
+            encoded_cert = config_get('cert')
+            cert = base64.b64decode(encoded_cert)
+            with open("/etc/rsyslog.d/keys/ca.d/rsyslog.crt", "w") as c:
                 c.write(cert)
                 c.close()
 
@@ -87,8 +89,9 @@ def update_certfile():
     with open(CERT_FILE, 'w') as fd:
         fd.write(get_template('certificate').render())
 
+
 def update_imfile(imfiles):
-    if imfiles == []:
+    if not imfiles:
         if os.path.exists(IMFILE_FILE):
             os.remove(IMFILE_FILE)
         return
@@ -160,8 +163,9 @@ def update_replication():
     if server_list:
         for server_pair in server_list.split(','):
             if len(server_pair.split('=')) != 2:
-                juju_log("Wrong forward_hosts option, missing "
-                         "hostname=address format, found: {}".format(server_pair))
+                juju_log(
+                    "Wrong forward_hosts option, missing "
+                    "hostname=address format, found: {}".format(server_pair))
                 continue
             server = Server()
             [server.remote_unit, uri] = server_pair.split('=')
@@ -178,7 +182,6 @@ def update_replication():
     if not len(servers):
         juju_log("Ready for add rsyslog relations to this forwarder")
         sys.exit(0)
-
 
     mode = config_get('replication-mode')
 

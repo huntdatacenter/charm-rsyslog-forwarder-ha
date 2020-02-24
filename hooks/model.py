@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import DatabaseError, SQLAlchemyError
 
 import os
 import datetime
@@ -20,7 +21,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-PORT_COLUMN_CREATION = "ALTER TABLE server ADD COLUMN port INT";
+PORT_COLUMN_CREATION = "ALTER TABLE server ADD COLUMN port INT"
 
 
 class Server(Base):
@@ -40,7 +41,7 @@ class Server(Base):
                 relation_id=relation_id).one()
             session.delete(server)
             session.commit()
-        except:
+        except SQLAlchemyError:
             session.rollback()
 
     @classmethod
@@ -57,14 +58,14 @@ class Server(Base):
         try:
             server = session.query(Server).filter_by(
                 relation_id=params.get('relation_id')).one()
-        except:
+        except SQLAlchemyError:
             server = cls(relation_id=params.get('relation_id'),
                          remote_unit=params.get('remote_unit'),
                          private_address=params.get('unit_private_ip'))
             try:
                 session.add(server)
                 session.commit()
-            except:
+            except SQLAlchemyError:
                 session.rollback()
         return server
 
@@ -73,7 +74,8 @@ def setup_local_database():
     Base.metadata.create_all(engine)
     engine.execute(PORT_COLUMN_CREATION)
 
+
 try:
     setup_local_database()
-except:
+except (DatabaseError, SQLAlchemyError):
     pass
