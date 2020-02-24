@@ -23,6 +23,7 @@ from charmhelpers.core.hookenv import (
     log as juju_log,
     remote_unit,
     relation_get,
+    status_set
 )
 from charmhelpers.contrib.charmsupport import nrpe
 
@@ -284,6 +285,7 @@ def config_changed():
     update_certfile()
     update_replication()
     update_nrpe_config()
+    status_set("active", "Unit is ready")
 
 
 if __name__ == "__main__":
