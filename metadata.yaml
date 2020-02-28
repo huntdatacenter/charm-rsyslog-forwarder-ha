@@ -1,5 +1,5 @@
 name: rsyslog-forwarder-ha
-maintainer: rsyslog-charmers <rsyslog-charmers@lists.launchpad.net>
+maintainer: LMA Charmers <llama-charmers@lists.ubuntu.com>
 subordinate: true
 summary: forwards local syslog to multiple remote syslog servers.
 description: |
