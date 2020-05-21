@@ -22,6 +22,7 @@ UBUNTU_RELEASES = (
     'artful',
     'bionic',
     'cosmic',
+    'focal',
 )
 
 
