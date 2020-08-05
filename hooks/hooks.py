@@ -188,7 +188,7 @@ def update_replication():
 
     mode = config_get("replication-mode")
 
-    if mode not in ("fanout", "failover",):
+    if mode not in ["fanout", "failover"]:
         die("Invalid provided replication mode: %s" % mode)
 
     if mode == "failover":
