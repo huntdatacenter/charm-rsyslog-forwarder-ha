@@ -1,15 +1,16 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+"""Define SQLalchemy model for rsyslog-servers database."""
 
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.ext.declarative import declarative_base
+import datetime
+import os
+
+from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy import create_engine
+from sqlalchemy.exc import DatabaseError, SQLAlchemyError
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.exc import DatabaseError, SQLAlchemyError
-
-import os
-import datetime
 
 
 DEFAULT_SQLITE_PATH = os.path.expanduser("~/.rsyslog-servers.db")
@@ -25,6 +26,8 @@ PORT_COLUMN_CREATION = "ALTER TABLE server ADD COLUMN port INT"
 
 
 class Server(Base):
+    """Define Server model for database."""
+
     __tablename__ = "server"
 
     id = Column(Integer, primary_key=True)

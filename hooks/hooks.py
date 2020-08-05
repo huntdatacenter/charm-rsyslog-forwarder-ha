@@ -1,48 +1,37 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+"""Implement hooks for rsyslog-forwarder-ha charm."""
 
+import base64
 import os
-from subprocess import CalledProcessError
+import subprocess
 import sys
-
 from shutil import copyfile
 
 _HERE = os.path.abspath(os.path.dirname(__file__))
 
 sys.path.insert(0, os.path.join(_HERE, "charmhelpers"))
 
-from charmhelpers.core.host import (
-    service_start,
-    service_restart,
-)
-
-from charmhelpers.core.hookenv import (
+from charmhelpers.contrib.charmsupport import nrpe  # noqa:E402
+from charmhelpers.core.hookenv import (  # noqa:E402
     Hooks,
-    relation_id,
     config as config_get,
     log as juju_log,
-    remote_unit,
     relation_get,
+    relation_id,
+    remote_unit,
     status_set,
 )
-from charmhelpers.contrib.charmsupport import nrpe
+from charmhelpers.core.host import (  # noqa: E402
+    service_restart,
+    service_start,
+)
+from charmhelpers.fetch import apt_install  # noqa:E402
 
-from charmhelpers.fetch import apt_install
+from model import Server, session  # noqa:E402
+from utils import get_template_dir, get_template  # noqa:E402
+from utils import __die as die  # noqa:E402
 
-try:
-    import sqlalchemy
-except ImportError:
-    try:
-        apt_install("python-sqlalchemy")
-    except CalledProcessError:
-        pass
-
-from model import Server, session
-from utils import get_template_dir, get_template
-from utils import __die as die
-
-import base64
-import subprocess
 
 required_packages = [
     "rsyslog",
@@ -118,9 +107,7 @@ def update_nrpe_config():
 
 
 def update_failover_replication(servers):
-    """
-    Set the configuration file to failover
-    """
+    """Set the configuration file to failover."""
 
     def _master_selection(servers):
         return servers[0], servers[1:]
@@ -140,9 +127,7 @@ def update_failover_replication(servers):
 
 
 def update_fanout_replication(servers):
-    """
-    Set the configuration file to fanout replication
-    """
+    """Set the configuration file to fanout replication."""
     with open(REPLICATION_FILE, "w") as fd:
         fd.write(
             get_template("fanout").render(
@@ -191,6 +176,11 @@ def update_replication():
     if mode not in ["fanout", "failover"]:
         die("Invalid provided replication mode: %s" % mode)
 
+    update_replication_by_mode(mode, servers)
+    service_restart("rsyslog")
+
+
+def update_replication_by_mode(mode, servers):
     if mode == "failover":
         if not len(servers) >= 2:
             juju_log(
@@ -202,8 +192,6 @@ def update_replication():
             update_failover_replication(servers)
     else:
         update_fanout_replication(servers)
-
-    service_restart("rsyslog")
 
 
 @hooks.hook()

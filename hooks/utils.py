@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+"""Define utility functions to support rsyslog-forwarder-ha charm."""
 
+import os
+import sys
 from subprocess import CalledProcessError
 
-from charmhelpers.core import hookenv
 from charmhelpers import fetch
+from charmhelpers.core import hookenv
 
 try:
     from jinja2 import Environment, FileSystemLoader
@@ -14,9 +17,6 @@ except ImportError:
         from jinja2 import Environment, FileSystemLoader
     except (ImportError, CalledProcessError):
         pass
-
-import os
-import sys
 
 
 def __die(message):
