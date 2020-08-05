@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'Jorge Niedbalski R. <jorge.niedbalski@canonical.com>'
+__author__ = "Jorge Niedbalski R. <jorge.niedbalski@canonical.com>"
 
 import os
 
@@ -63,7 +63,6 @@ class DummyServerList(object):
 
 
 class HooksTestCase(unittest.TestCase):
-
     def setUp(self):
         unittest.TestCase.setUp(self)
         self.patch_all()
@@ -87,7 +86,7 @@ class HooksTestCase(unittest.TestCase):
     def test_install_hook(self):
         """Check if install hooks is correctly executed
         """
-        hooks.hooks.execute(['install'])
+        hooks.hooks.execute(["install"])
 
         expected = [
             mock.call("rsyslog", fatal=True),
@@ -97,25 +96,24 @@ class HooksTestCase(unittest.TestCase):
             mock.call("rsyslog-gnutls", fatal=True),
         ]
 
-        self.assertEquals(sorted(self.apt_install.call_args_list),
-                          sorted(expected))
+        self.assertEquals(sorted(self.apt_install.call_args_list), sorted(expected))
 
     def test_upgrade_charm(self):
         """Check if charm upgrade hooks is correctly executed
         """
-        hooks.hooks.execute(['upgrade-charm'])
+        hooks.hooks.execute(["upgrade-charm"])
         self.install.assert_called_once()
 
     def test_start_charm(self):
         """Check if start hook is correctly executed
         """
-        hooks.hooks.execute(['start'])
+        hooks.hooks.execute(["start"])
         self.service_start.assert_called_with("rsyslog")
 
     def test_stop_charm(self):
         """Check if rsyslog is returned to default config and restart executed
         """
-        hooks.hooks.execute(['stop'])
+        hooks.hooks.execute(["stop"])
         self.service_restart.assert_called_with("rsyslog")
 
     @mock.patch("hooks.hooks.update_replication")
@@ -174,7 +172,7 @@ class HooksTestCase(unittest.TestCase):
         """check if update_replication works with 2 servers in failover
         replication mode"""
         self.session.query.return_value = DummyServerList()
-        self.config_get.return_value = 'failover'
+        self.config_get.return_value = "failover"
 
         hooks.update_replication()
         failover.assert_called_once()
@@ -186,7 +184,7 @@ class HooksTestCase(unittest.TestCase):
     def test_update_replication_fanout(self, fanout, failover):
         """check if update_replication works with fanout replication mode"""
         self.session.query.return_value = DummyServerList()
-        self.config_get.return_value = 'fanout'
+        self.config_get.return_value = "fanout"
 
         hooks.update_replication()
         fanout.assert_called_once()
@@ -198,7 +196,7 @@ class HooksTestCase(unittest.TestCase):
     def test_update_replication_bad_charm_config(self, fanout, failover):
         """rsyslog forwarding (malformed config check)"""
         self.session.query.return_value = DummyServerList()
-        self.config_get.return_value = 'wrong format'
+        self.config_get.return_value = "wrong format"
 
         hooks.update_replication()
         args, kwargs = self.juju_log.call_args
@@ -210,10 +208,9 @@ class HooksTestCase(unittest.TestCase):
     def test_update_replication_good_charm_config(self, fanout, failover, Server):
         """rsyslog forwarding (valid config options)"""
         self.session.query.return_value = DummyServerList()
-        self.config_get.return_value = \
-            'hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3'
+        self.config_get.return_value = (
+            "hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3"
+        )
 
         hooks.update_replication()
-        self.assertEqual(Server.mock_calls, [
-            mock.call(), mock.call(), mock.call()
-        ])
+        self.assertEqual(Server.mock_calls, [mock.call(), mock.call(), mock.call()])

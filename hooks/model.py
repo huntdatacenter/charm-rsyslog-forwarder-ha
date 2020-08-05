@@ -16,7 +16,7 @@ DEFAULT_SQLITE_PATH = os.path.expanduser("~/.rsyslog-servers.db")
 
 Base = declarative_base()
 
-engine = create_engine('sqlite:///%s' % DEFAULT_SQLITE_PATH)
+engine = create_engine("sqlite:///%s" % DEFAULT_SQLITE_PATH)
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -25,7 +25,7 @@ PORT_COLUMN_CREATION = "ALTER TABLE server ADD COLUMN port INT"
 
 
 class Server(Base):
-    __tablename__ = 'server'
+    __tablename__ = "server"
 
     id = Column(Integer, primary_key=True)
     relation_id = Column(String(250), nullable=False)
@@ -37,8 +37,7 @@ class Server(Base):
     @classmethod
     def remove(cls, relation_id):
         try:
-            server = session.query(Server).filter_by(
-                relation_id=relation_id).one()
+            server = session.query(Server).filter_by(relation_id=relation_id).one()
             session.delete(server)
             session.commit()
         except SQLAlchemyError:
@@ -47,8 +46,7 @@ class Server(Base):
     @classmethod
     def has_relation(cls, relation_id):
         try:
-            session.query(cls).filter_by(
-                relation_id=relation_id).one()
+            session.query(cls).filter_by(relation_id=relation_id).one()
         except NoResultFound:
             return False
         return True
@@ -56,12 +54,17 @@ class Server(Base):
     @classmethod
     def get_or_create(cls, **params):
         try:
-            server = session.query(Server).filter_by(
-                relation_id=params.get('relation_id')).one()
+            server = (
+                session.query(Server)
+                .filter_by(relation_id=params.get("relation_id"))
+                .one()
+            )
         except SQLAlchemyError:
-            server = cls(relation_id=params.get('relation_id'),
-                         remote_unit=params.get('remote_unit'),
-                         private_address=params.get('unit_private_ip'))
+            server = cls(
+                relation_id=params.get("relation_id"),
+                remote_unit=params.get("remote_unit"),
+                private_address=params.get("unit_private_ip"),
+            )
             try:
                 session.add(server)
                 session.commit()

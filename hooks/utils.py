@@ -25,9 +25,9 @@ def __die(message):
 
 
 def get_template_dir():
-    return os.path.join(hookenv.charm_dir(), 'templates')
+    return os.path.join(hookenv.charm_dir(), "templates")
 
 
 def get_template(name):
     template_env = Environment(loader=FileSystemLoader(get_template_dir()))
-    return template_env.get_template(name + '.template')
+    return template_env.get_template(name + ".template")
