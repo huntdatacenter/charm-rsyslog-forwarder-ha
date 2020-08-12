@@ -1,20 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
+"""Define unit tests for rsyslog-forwarder-ha charm utilities."""
 
-__author__ = 'Jorge Niedbalski R. <jorge.niedbalski@canonical.com>'
+__author__ = "Jorge Niedbalski R. <jorge.niedbalski@canonical.com>"
 
 import os
+
+from hooks import hooks
 
 _HERE = os.path.abspath(os.path.dirname(__file__))
 
 try:
     import unittest
     import mock
-except ImportError as ex:
+except ImportError:
     raise ImportError("Please install unittest and mock modules")
-
-
-from hooks import hooks
 
 
 TO_PATCH = [
@@ -39,7 +39,10 @@ TO_PATCH = [
 
 
 class DummyServer(object):
+    """Define DummyServer class for model mocking."""
+
     def __init__(self):
+        """Instantiate new DummyServer object."""
         self.port_value = "-1"
 
     @property
@@ -52,7 +55,10 @@ class DummyServer(object):
 
 
 class DummyServerList(object):
+    """Define DummyServerList class for model mocking."""
+
     def __init__(self, empty=False):
+        """Instantiate new DummyServerList object."""
         if empty:
             self.list = []
         else:
@@ -63,6 +69,7 @@ class DummyServerList(object):
 
 
 class HooksTestCase(unittest.TestCase):
+    """Define tests to exercise hook functions of rsyslog-forwarder-ha charm."""
 
     def setUp(self):
         unittest.TestCase.setUp(self)
@@ -85,9 +92,8 @@ class HooksTestCase(unittest.TestCase):
             setattr(self, method, self.patch(method))
 
     def test_install_hook(self):
-        """Check if install hooks is correctly executed
-        """
-        hooks.hooks.execute(['install'])
+        """Check if install hooks is correctly executed."""
+        hooks.hooks.execute(["install"])
 
         expected = [
             mock.call("rsyslog", fatal=True),
@@ -97,31 +103,26 @@ class HooksTestCase(unittest.TestCase):
             mock.call("rsyslog-gnutls", fatal=True),
         ]
 
-        self.assertEquals(sorted(self.apt_install.call_args_list),
-                          sorted(expected))
+        self.assertEquals(sorted(self.apt_install.call_args_list), sorted(expected))
 
     def test_upgrade_charm(self):
-        """Check if charm upgrade hooks is correctly executed
-        """
-        hooks.hooks.execute(['upgrade-charm'])
+        """Check if charm upgrade hooks is correctly executed."""
+        hooks.hooks.execute(["upgrade-charm"])
         self.install.assert_called_once()
 
     def test_start_charm(self):
-        """Check if start hook is correctly executed
-        """
-        hooks.hooks.execute(['start'])
+        """Check if start hook is correctly executed."""
+        hooks.hooks.execute(["start"])
         self.service_start.assert_called_with("rsyslog")
 
     def test_stop_charm(self):
-        """Check if rsyslog is returned to default config and restart executed
-        """
-        hooks.hooks.execute(['stop'])
+        """Check if rsyslog is returned to default config and restart executed."""
+        hooks.hooks.execute(["stop"])
         self.service_restart.assert_called_with("rsyslog")
 
     @mock.patch("hooks.hooks.update_replication")
     def test_syslog_relation_joined(self, replication):
-        """Check if syslog_relation_joined works"""
-
+        """Check if syslog_relation_joined works."""
         self.relation_id.return_value = 0
         self.Server.has_relation.return_value = False
 
@@ -135,7 +136,7 @@ class HooksTestCase(unittest.TestCase):
 
     @mock.patch("hooks.hooks.update_replication")
     def test_syslog_relation_departed(self, replication):
-        """check if syslog_relation_departed works"""
+        """Check if syslog_relation_departed works."""
         self.relation_id.return_value = 0
 
         self.Server.remove.assert_called_once()
@@ -143,7 +144,7 @@ class HooksTestCase(unittest.TestCase):
 
     @mock.patch("hooks.hooks.update_replication")
     def test_syslog_relation_broken(self, replication):
-        """check if syslog_relation_broken works"""
+        """Check if syslog_relation_broken works."""
         self.relation_id.return_value = 0
 
         self.Server.remove.assert_called_once()
@@ -151,7 +152,7 @@ class HooksTestCase(unittest.TestCase):
 
     @mock.patch("hooks.hooks.update_replication")
     def test_config_changed(self, replication):
-        """check if config_changed hook works"""
+        """Check if config_changed hook works."""
         self.update_local_logs.assert_called_once()
         self.update_imfile.assert_called_once()
         replication.assert_called_once()
@@ -159,7 +160,7 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_failover_replication")
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_no_servers(self, failover, fanout):
-        """check if update_replication works with no servers given"""
+        """Check if update_replication works with no servers given."""
         self.session.query.return_value = DummyServerList(empty=True)
 
         hooks.update_replication()
@@ -171,10 +172,9 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_failover_replication")
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_failover(self, fanout, failover):
-        """check if update_replication works with 2 servers in failover
-        replication mode"""
+        """Check if update_replication works with 2 servers in failover repl mode."""
         self.session.query.return_value = DummyServerList()
-        self.config_get.return_value = 'failover'
+        self.config_get.return_value = "failover"
 
         hooks.update_replication()
         failover.assert_called_once()
@@ -184,9 +184,9 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_failover_replication")
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_fanout(self, fanout, failover):
-        """check if update_replication works with fanout replication mode"""
+        """Check if update_replication works with fanout replication mode."""
         self.session.query.return_value = DummyServerList()
-        self.config_get.return_value = 'fanout'
+        self.config_get.return_value = "fanout"
 
         hooks.update_replication()
         fanout.assert_called_once()
@@ -196,9 +196,9 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.update_failover_replication")
     @mock.patch("hooks.hooks.update_fanout_replication")
     def test_update_replication_bad_charm_config(self, fanout, failover):
-        """rsyslog forwarding (malformed config check)"""
+        """Check proper handling of malformed config."""
         self.session.query.return_value = DummyServerList()
-        self.config_get.return_value = 'wrong format'
+        self.config_get.return_value = "wrong format"
 
         hooks.update_replication()
         args, kwargs = self.juju_log.call_args
@@ -207,13 +207,12 @@ class HooksTestCase(unittest.TestCase):
     @mock.patch("hooks.hooks.Server")
     @mock.patch("hooks.hooks.update_failover_replication")
     @mock.patch("hooks.hooks.update_fanout_replication")
-    def test_update_replication_good_charm_config(self, fanout, failover, Server):
-        """rsyslog forwarding (valid config options)"""
+    def test_update_replication_good_charm_config(self, fanout, failover, server):
+        """Check update_replication works with valid config."""
         self.session.query.return_value = DummyServerList()
-        self.config_get.return_value = \
-            'hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3'
+        self.config_get.return_value = (
+            "hostname1=host_ip1,hostname2=host_ip2,hostname3=host_ip3"
+        )
 
         hooks.update_replication()
-        self.assertEqual(Server.mock_calls, [
-            mock.call(), mock.call(), mock.call()
-        ])
+        self.assertEqual(server.mock_calls, [mock.call(), mock.call(), mock.call()])

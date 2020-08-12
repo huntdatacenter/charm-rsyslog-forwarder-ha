@@ -1,0 +1,16 @@
+charm_name: rsyslog-forwarder-ha
+gate_bundles:
+  - focal
+  - bionic
+  - xenial
+smoke_bundles:
+  - bionic
+dev_bundles:
+  - focal
+tests:
+  - tests.test_rsyslog_forwarder_ha.CharmOperationTest
+target_deploy_status:
+  rsyslog-forwarder-ha:
+    workload-status: unknown
+    workload-status-message: ''
+
