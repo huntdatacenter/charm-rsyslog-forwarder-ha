@@ -36,8 +36,8 @@ from utils import __die as die  # noqa:E402
 required_packages = [
     "rsyslog",
     "rsyslog-relp",
-    "python-jinja2",
-    "python-sqlalchemy",
+    "python3-jinja2",
+    "python3-sqlalchemy",
     "rsyslog-gnutls",
 ]
 

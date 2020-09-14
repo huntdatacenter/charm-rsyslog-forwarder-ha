@@ -13,7 +13,7 @@ try:
     from jinja2 import Environment, FileSystemLoader
 except ImportError:
     try:
-        fetch.apt_install("python-jinja2")
+        fetch.apt_install("python3-jinja2")
         from jinja2 import Environment, FileSystemLoader
     except (ImportError, CalledProcessError):
         pass
