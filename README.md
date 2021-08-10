@@ -45,7 +45,7 @@ Once your rsyslog aggregators are ready, you can relate them with your forwarder
 Once you have your rsyslog ports opened. You can change the replication-mode variable
 on your rsyslog-forwarder-ha charm.
 
-    juju set rsyslog-forwarder-ha replication-mode="failover"
+    juju config rsyslog-forwarder-ha replication-mode="failover"
 
 # Contact Information
 
