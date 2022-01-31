@@ -38,7 +38,7 @@ submodules-update:
 	@echo "Pulling latest updates for submodules"
 	@git submodule update --init --recursive --remote --merge
 
-build:
+build: submodules
 	@echo "Building charm to base directory ${CHARM_BUILD_DIR}/${CHARM_NAME}"
 	@-git rev-parse --abbrev-ref HEAD > ./repo-info
 	@-git describe --always > ./version
@@ -60,13 +60,17 @@ proof:
 	@echo "Running charm proof"
 	@-charm proof
 
-unittests:
+unittests: submodules
 	@echo "Running unit tests"
 	@tox -e unit
 
 functional: build
 	@echo "Executing functional tests in ${CHARM_BUILD_DIR}"
 	@CHARM_BUILD_DIR=${CHARM_BUILD_DIR} tox -e func
+
+functional-ci: build
+	@echo "Executing functional tests in ${CHARM_BUILD_DIR}"
+	@CHARM_BUILD_DIR=${CHARM_BUILD_DIR} tox -e func -- --keep-faulty-model
 
 test: lint proof unittests functional
 	@echo "Charm ${CHARM_NAME} has been tested"

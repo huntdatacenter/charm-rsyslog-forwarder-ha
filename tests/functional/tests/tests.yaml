@@ -13,4 +13,5 @@ target_deploy_status:
   rsyslog-forwarder-ha:
     workload-status: unknown
     workload-status-message: ''
-
+  syslog-source:
+    workload-status-message: ''
