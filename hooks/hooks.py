@@ -219,6 +219,7 @@ def install():
 
     update_certfile()
     update_local_logs(keep=config_get("log-locally"))
+    status_set("active", "Unit is ready")
 
 
 @hooks.hook()
