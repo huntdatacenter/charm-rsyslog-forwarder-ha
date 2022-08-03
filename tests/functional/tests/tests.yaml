@@ -3,10 +3,11 @@ gate_bundles:
   - focal
   - bionic
   - xenial
+  - jammy
 smoke_bundles:
   - bionic
 dev_bundles:
-  - focal
+  - jammy
 tests:
   - tests.test_rsyslog_forwarder_ha.CharmOperationTest
 target_deploy_status:
