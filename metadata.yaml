@@ -7,11 +7,7 @@ description: |
 tags:
   - audits
   - ops
-series:
-  - focal
-  - bionic
-  - xenial
-  - jammy
+series: []
 provides:
   nrpe-external-master:
     interface: nrpe-external-master
