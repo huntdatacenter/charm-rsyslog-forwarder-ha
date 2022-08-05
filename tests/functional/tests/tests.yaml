@@ -1,8 +1,7 @@
 charm_name: rsyslog-forwarder-ha
 gate_bundles:
-  - focal
   - bionic
-  - xenial
+  - focal
   - jammy
 smoke_bundles:
   - bionic
