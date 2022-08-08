@@ -1,12 +1,12 @@
 charm_name: rsyslog-forwarder-ha
 gate_bundles:
-  - focal
   - bionic
-  - xenial
+  - focal
+  - jammy
 smoke_bundles:
   - bionic
 dev_bundles:
-  - focal
+  - jammy
 tests:
   - tests.test_rsyslog_forwarder_ha.CharmOperationTest
 target_deploy_status:

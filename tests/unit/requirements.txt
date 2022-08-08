@@ -1,7 +1,7 @@
 flake8
 coverage
 PyYAML==3.10
-SQLAlchemy==0.9.4
+SQLAlchemy
 mock==1.0.1
 six
 charmhelpers

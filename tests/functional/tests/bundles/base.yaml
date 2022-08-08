@@ -1,12 +1,12 @@
-services:
+applications:
   rsyslog:
-    charm: cs:~llama-charmers-next/rsyslog
+    charm: ch:rsyslog
     num_units: 1
   rsyslog-forwarder-ha:
-    charm: cs:rsyslog-forwarder-ha
+    charm: ../../../../rsyslog-forwarder-ha.charm
     num_units: 0
   syslog-source:
-    charm: cs:ubuntu
+    charm: ch:ubuntu
     num_units: 1
 relations:
   - - rsyslog-forwarder-ha:syslog
