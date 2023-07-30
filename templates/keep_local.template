@@ -4,7 +4,7 @@ kern.*                          -/var/log/kern.log
 
 # Some defaults
 auth,authpriv.*                 /var/log/auth.log
-*.*;auth,authpriv.none          -/var/log/syslog
+*.*;auth,authpriv.none,kern.none,mail.none          -/var/log/syslog
 #cron.*                         /var/log/cron.log
 #daemon.*                       -/var/log/daemon.log
 #lpr.*                          -/var/log/lpr.log
