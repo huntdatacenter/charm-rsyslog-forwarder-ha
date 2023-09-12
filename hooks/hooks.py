@@ -87,26 +87,29 @@ def update_imfile(imfiles):
 def update_local_logs(keep=True):
     if keep:
         additional_logs = {
-            'cron.*': '/var/log/cron.log',
-            'daemon.*': '/var/log/daemon.log',
-            'lpr.*': '/var/log/lpr.log',
-            'user.*': '/var/log/user.log',
-            'mail.info': '/var/log/mail.info',
-            'mail.warn': '/var/log/mail.warn',
+            "cron.*": "/var/log/cron.log",
+            "daemon.*": "/var/log/daemon.log",
+            "lpr.*": "/var/log/lpr.log",
+            "user.*": "/var/log/user.log",
+            "mail.info": "/var/log/mail.info",
+            "mail.warn": "/var/log/mail.warn",
         }
         new = {}
         for al, logf in additional_logs.items():
             if os.path.exists(logf):
                 new[al] = logf
         debug_log = False
-        if os.path.exists('/var/log/debug'):
+        if os.path.exists("/var/log/debug"):
             debug_log = True
         messages_log = False
-        if os.path.exists('/var/log/messages'):
+        if os.path.exists("/var/log/messages"):
             messages_log = True
 
         with open(LOGS_SYSTEM_FILE, "w") as fd:
-            fd.write(get_template("keep_local").render(additional=new, debug_log=debug_log, messages_log=messages_log))
+            tmpl = get_template("keep_local").render(
+                additional=new, debug_log=debug_log, messages_log=messages_log
+            )
+            fd.write(tmpl)
     else:
         if os.path.exists(LOGS_SYSTEM_FILE):
             os.remove(LOGS_SYSTEM_FILE)
