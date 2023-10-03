@@ -78,7 +78,8 @@ class Server(Base):
 
 def setup_local_database():
     Base.metadata.create_all(engine)
-    engine.execute(PORT_COLUMN_CREATION)
+    with engine.connect() as conn:
+        conn.execute(PORT_COLUMN_CREATION)
 
 
 try:
