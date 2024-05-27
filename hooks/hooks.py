@@ -6,7 +6,6 @@ import base64
 import os
 import subprocess
 import sys
-from shutil import copyfile
 
 _HERE = os.path.abspath(os.path.dirname(__file__))
 
@@ -29,7 +28,7 @@ from charmhelpers.core.host import (  # noqa: E402
 from charmhelpers.fetch import apt_install  # noqa:E402
 
 from model import Server, session  # noqa:E402
-from utils import get_template_dir, get_template  # noqa:E402
+from utils import get_template  # noqa:E402
 from utils import __die as die  # noqa:E402
 
 
@@ -43,7 +42,6 @@ required_packages = [
 
 
 IMFILE_FILE = "/etc/rsyslog.d/40-rsyslog-imfile.conf"
-LOGS_TEMPLATE = "keep_local.template"
 LOGS_SYSTEM_FILE = "/etc/rsyslog.d/50-default.conf"
 REPLICATION_FILE = "/etc/rsyslog.d/45-rsyslog-replication.conf"
 CERT_FILE = "/etc/rsyslog.d/42-cert-rsyslog.conf"
@@ -88,7 +86,30 @@ def update_imfile(imfiles):
 
 def update_local_logs(keep=True):
     if keep:
-        copyfile(os.path.join(get_template_dir(), LOGS_TEMPLATE), LOGS_SYSTEM_FILE)
+        additional_logs = {
+            "cron.*": "/var/log/cron.log",
+            "daemon.*": "/var/log/daemon.log",
+            "lpr.*": "/var/log/lpr.log",
+            "user.*": "/var/log/user.log",
+            "mail.info": "/var/log/mail.info",
+            "mail.warn": "/var/log/mail.warn",
+        }
+        new = {}
+        for al, logf in additional_logs.items():
+            if os.path.exists(logf):
+                new[al] = logf
+        debug_log = False
+        if os.path.exists("/var/log/debug"):
+            debug_log = True
+        messages_log = False
+        if os.path.exists("/var/log/messages"):
+            messages_log = True
+
+        with open(LOGS_SYSTEM_FILE, "w") as fd:
+            tmpl = get_template("keep_local").render(
+                additional=new, debug_log=debug_log, messages_log=messages_log
+            )
+            fd.write(tmpl)
     else:
         if os.path.exists(LOGS_SYSTEM_FILE):
             os.remove(LOGS_SYSTEM_FILE)
