@@ -1,0 +1,30 @@
+
+variables:
+  # Rsyslog forwarder HA
+  forward_hosts: &syslog_forward_hosts                            'hostname1=10.42.132.36'
+
+machines:
+  '0':
+    base: ubuntu@24.04
+
+relations:
+- - ubuntu:juju-info
+  - ubuntu-rsyslog-forwarder:juju-info
+
+default-base: ubuntu@24.04
+applications:
+  # Ubuntu -- https://charmhub.io/huntdatacenter-ubuntu-lite
+  ubuntu:
+    charm: huntdatacenter-ubuntu-lite
+    num_units: 1
+    to:
+      - '0'
+  # Rsyslog Forwarder Ha - https://charmhub.io/huntdatacenter-rsyslog-forwarder-ha
+  ubuntu-rsyslog-forwarder:
+    # charm: ../../rsyslog-forwarder-ha_amd64.charm
+    charm: huntdatacenter-rsyslog-forwarder-ha
+    num_units: 0
+    options:
+      log-locally: true
+      protocol: 'udp'
+      forward_hosts: *syslog_forward_hosts

@@ -7,7 +7,8 @@ description: |
 tags:
   - audits
   - ops
-series: []
+# series: []
+
 provides:
   nrpe-external-master:
     interface: nrpe-external-master

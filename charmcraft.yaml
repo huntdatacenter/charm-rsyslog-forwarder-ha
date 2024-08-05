@@ -14,29 +14,16 @@ parts:
       - metadata.yaml
       - README.md
 
-bases:
-    - build-on:
-        - name: ubuntu
-          channel: "20.04"
-          architectures: ["amd64"]
-        - name: ubuntu
-          channel: "22.04"
-          architectures: ["amd64"]
-      run-on:
-        - name: ubuntu
-          channel: "22.04"
-          architectures:
-              - amd64
-        - name: ubuntu
-          channel: "20.04"
-          architectures:
-              - amd64
-        - name: ubuntu
-          channel: "18.04"
-          architectures:
-              - amd64
-        - name: ubuntu
-          channel: "16.04"
-          architectures:
-              - amd64
-
+base: ubuntu@24.04
+# build-base: ubuntu@24.04
+platforms:
+  amd64:
+    build-on:
+      - amd64
+    build-for:
+      - amd64
+  arm64:
+    build-on:
+      - amd64
+    build-for:
+      - arm64
